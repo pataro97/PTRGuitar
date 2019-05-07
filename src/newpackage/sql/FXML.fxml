@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newpackage.sql.FXMLController">
+   <children>
+      <TableView fx:id="tablaViewModelos" prefHeight="249.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="columnIDGUITARRA" prefWidth="87.0" text="ID GUITARRA" />
+          <TableColumn fx:id="columnModelo" prefWidth="62.0" text="MODELO" />
+            <TableColumn fx:id="columnFabricante" prefWidth="81.0" text="FABRICANTE" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

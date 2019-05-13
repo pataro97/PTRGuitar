@@ -10,8 +10,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,10 +25,12 @@ import javax.persistence.Persistence;
 public class FXMain extends Application {
     private EntityManagerFactory emf;
     private EntityManager em;
+    StackPane rootMain = new StackPane();
     @Override
     public void start(Stage primaryStage) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML.fxml"));
-        Parent root = fxmlLoader.load();
+        Pane rootFXML = fxmlLoader.load();
+        rootMain.getChildren().add(rootFXML);
 
         emf = Persistence.createEntityManagerFactory("PTRGuitarPU");
         em = emf.createEntityManager();
@@ -36,7 +39,7 @@ public class FXMain extends Application {
         fxmlController.setEntityManager(em);
         fxmlController.cargarTodasGuitarras();
         
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(rootMain, 650, 400);
 
         primaryStage.setTitle("PTR Guitar");
         primaryStage.setScene(scene);

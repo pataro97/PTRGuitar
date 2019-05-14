@@ -13,10 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javax.persistence.EntityManager;
 
 /**
  * FXML Controller class
@@ -48,6 +50,12 @@ public class FormularioFXMLController implements Initializable {
     private Pane rootFormulariosView;
     @FXML
     private AnchorPane formularioFXML;
+    
+    private TableView guitarraView;
+    private Guitarra guitarra;
+    private EntityManager entityManager;
+    private boolean nuevaGuitarra;
+    
     /**
      * Initializes the controller class.
      */
@@ -73,6 +81,44 @@ public class FormularioFXMLController implements Initializable {
 
         rootFormulariosView.setVisible(true);
     }
+    
+    
+    public void setTableViewPrevio(TableView guitarraView) {
+        this.guitarraView = guitarraView;
+    }
+    
+    
+    
+    public void setGuitarra(EntityManager entityManager, Guitarra guitarra, boolean nuevaGuitarra) {
+    this.entityManager = entityManager;
+    entityManager.getTransaction().begin();
+    if(!nuevaGuitarra) {
+        this.guitarra = entityManager.find(Guitarra.class, guitarra.getIdGuitarra());
+    } else {
+        this.guitarra = guitarra;
+    }
+    this.nuevaGuitarra = nuevaGuitarra;
+}
+    public void mostrarDatos() {
+        modeloTextField.setText(guitarra.getModelo());
+        maderaTextField.setText(guitarra.getMadera());
+        //Pasar bigDecimal a string
+        precioTextField.setText(String.valueOf(guitarra.getPrecio()));
+        //RadioButton
+//        if (guitarra.getModelo() != null) {
+//            switch (guitarra.getModelo()) {
+//                case CASADO:
+//                    radioButtonCasado.setSelected(true);
+//                    break;
+//                case SOLTERO:
+//                    radioButtonSoltero.setSelected(true);
+//                    break;
+//                case VIUDO:
+//                    radioButtonViudo.setSelected(true);
+//                    break;
+//            }
+//}
+}
     
     
 }

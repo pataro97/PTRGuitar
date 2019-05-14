@@ -131,7 +131,18 @@ public class FXMLController implements Initializable {
             formularioFXMLController.setRootFormularioView(rootGuitarrasView);
             
             
-            // Ocultar la vista de la lista
+            
+            
+            formularioFXMLController.setTableViewPrevio(tablaViewModelos);
+            
+            
+            // Para el botón Nuevo:
+            modeloSeleccionado = new Guitarra();
+            formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, true);
+            //Metodo que mostrara los datos en el formulario
+            formularioFXMLController.mostrarDatos();
+            
+            // Ocultar la vista de la lista guitarras
             rootGuitarrasView.setVisible(false);
 
             // Añadir la vista de detalle al StackPane principal para que se muestre
@@ -156,6 +167,10 @@ public class FXMLController implements Initializable {
             formularioFXMLController.setRootFormularioView(rootGuitarrasView);
             
             
+            formularioFXMLController.setTableViewPrevio(tablaViewModelos);
+            
+            
+            formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, true);
             
             // Ocultar la vista de la lista
             rootGuitarrasView.setVisible(false);

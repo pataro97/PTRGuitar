@@ -39,7 +39,7 @@ public class FXMain extends Application {
         fxmlController.setEntityManager(em);
         fxmlController.cargarTodasGuitarras();
         
-        Scene scene = new Scene(rootMain, 650, 400);
+        Scene scene = new Scene(rootMain, 650, 600);
 
         primaryStage.setTitle("PTR Guitar");
         primaryStage.setScene(scene);

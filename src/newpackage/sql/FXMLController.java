@@ -18,6 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -156,30 +158,37 @@ public class FXMLController implements Initializable {
 
     @FXML
     private void onActionButtonEditar(ActionEvent event) {
-         try {
-            // Cargar la vista de detalle
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FormularioFXML.fxml"));
-            Parent rootDetalleView = fxmlLoader.load();     
-            
-            
-            
-            FormularioFXMLController formularioFXMLController = (FormularioFXMLController) fxmlLoader.getController();  
-            formularioFXMLController.setRootFormularioView(rootGuitarrasView);
-            
-            
-            formularioFXMLController.setTableViewPrevio(tablaViewModelos);
-            
-            
-            formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, false);
-            
-            // Ocultar la vista de la lista
-            rootGuitarrasView.setVisible(false);
-            formularioFXMLController.mostrarDatos();
-            // Añadir la vista de detalle al StackPane principal para que se muestre
-            StackPane rootMain = (StackPane)rootGuitarrasView.getScene().getRoot();
-            rootMain.getChildren().add(rootDetalleView);
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+        if(modeloSeleccionado != null) {
+            try {
+               // Cargar la vista de detalle
+               FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FormularioFXML.fxml"));
+               Parent rootDetalleView = fxmlLoader.load();     
+
+
+
+               FormularioFXMLController formularioFXMLController = (FormularioFXMLController) fxmlLoader.getController();  
+               formularioFXMLController.setRootFormularioView(rootGuitarrasView);
+
+
+               formularioFXMLController.setTableViewPrevio(tablaViewModelos);
+
+
+               formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, false);
+
+               // Ocultar la vista de la lista
+               rootGuitarrasView.setVisible(false);
+               formularioFXMLController.mostrarDatos();
+               // Añadir la vista de detalle al StackPane principal para que se muestre
+               StackPane rootMain = (StackPane)rootGuitarrasView.getScene().getRoot();
+               rootMain.getChildren().add(rootDetalleView);
+           } catch (IOException ex) {
+               Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+           }
+         } else {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Atención");
+            alert.setHeaderText("Debe seleccionar un registro");
+            alert.showAndWait();
         }
     }
 

@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -43,15 +44,18 @@
             <TextField fx:id="maderaTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="precioTextField" maxWidth="50.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ComboBox fx:id="comboFabricante" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <CheckBox fx:id="checkStock" mnemonicParsing="false" text="Stock" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <CheckBox fx:id="checkStock" mnemonicParsing="false" selected="true" text="Stock" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Button alignment="BOTTOM_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Examinar..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
             <Button mnemonicParsing="false" onAction="#onActionButtonGuardar" text="Guardar" GridPane.columnIndex="2" />
             <Button mnemonicParsing="false" onAction="#onActionButtonCancelar" text="Cancelar" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <ImageView fitHeight="103.0" fitWidth="286.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <RadioButton fx:id="radioStratoCaster" mnemonicParsing="false" text="StratoCaster" />
-                  <RadioButton fx:id="radioTelecaster" mnemonicParsing="false" text="TeleCaster">
+                  <RadioButton fx:id="radioStratoCaster" mnemonicParsing="false" text="StratoCaster">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="tipoGroup" />
+                     </toggleGroup></RadioButton>
+                  <RadioButton fx:id="radioTelecaster" mnemonicParsing="false" text="TeleCaster" toggleGroup="$tipoGroup">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -59,17 +63,17 @@
                         <Insets left="5.0" />
                      </padding>
                   </RadioButton>
-                  <RadioButton fx:id="radioLesPaul" mnemonicParsing="false" text="Les Paul">
+                  <RadioButton fx:id="radioLesPaul" mnemonicParsing="false" text="Les Paul" toggleGroup="$tipoGroup">
                      <padding>
                         <Insets left="5.0" />
                      </padding>
                   </RadioButton>
-                  <RadioButton fx:id="radioAcustica" mnemonicParsing="false" text="Acustica">
+                  <RadioButton fx:id="radioAcustica" mnemonicParsing="false" text="Acustica" toggleGroup="$tipoGroup">
                      <padding>
                         <Insets left="5.0" />
                      </padding>
                   </RadioButton>
-                  <RadioButton fx:id="radioOtros" mnemonicParsing="false" text="Otros">
+                  <RadioButton fx:id="radioOtros" mnemonicParsing="false" text="Otros" toggleGroup="$tipoGroup">
                      <padding>
                         <Insets left="5.0" />
                      </padding>

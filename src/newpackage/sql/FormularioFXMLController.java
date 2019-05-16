@@ -17,6 +17,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -58,11 +59,13 @@ public class FormularioFXMLController implements Initializable {
     private EntityManager entityManager;
     private boolean nuevaGuitarra;
     
-    public static final String STRATOCASTER = "S";
-    public static final String LESPAUL = "L";
-    public static final String TELECASTER = "T";
-    public static final String ACUSTICA = "A";
-    public static final String OTROS = "O";
+    public static final String STRATOCASTER = "Stratocaster";
+    public static final String LESPAUL = "LesPaul";
+    public static final String TELECASTER = "Telecaster";
+    public static final String ACUSTICA = "Acustica";
+    public static final String OTROS = "Otros";
+    @FXML
+    private ToggleGroup tipoGroup;
     /**
      * Initializes the controller class.
      */
@@ -82,6 +85,20 @@ public class FormularioFXMLController implements Initializable {
         guitarra.setMadera(maderaTextField.getText());
         //Ahora hay que hacer lo contrario pasar de string a big decimal
         guitarra.setPrecio(BigDecimal.valueOf(Double.valueOf(precioTextField.getText())));
+        //Guardar radio button
+        if (radioStratoCaster.isSelected()) {
+            guitarra.setTipo(STRATOCASTER);
+        } else if (radioLesPaul.isSelected()) {
+            guitarra.setTipo(LESPAUL);
+        } else if (radioTelecaster.isSelected()) {
+            guitarra.setTipo(TELECASTER);
+        } else if (radioAcustica.isSelected()) {
+            guitarra.setTipo(ACUSTICA);
+        } else if (radioOtros.isSelected()) {
+            guitarra.setTipo(OTROS);
+        }
+        //Guardar Check
+        guitarra.setStock(checkStock.isSelected());
         
         if(nuevaGuitarra) {
             entityManager.persist(guitarra);
@@ -152,9 +169,13 @@ public class FormularioFXMLController implements Initializable {
         maderaTextField.setText(guitarra.getMadera());
         //Pasar bigDecimal a string
         precioTextField.setText(String.valueOf(guitarra.getPrecio()));
+        //CheckBox
+        if (guitarra.getStock() != null) {
+            checkStock.setSelected(guitarra.getStock());
+        }
         //RadioButton
-        if (guitarra.getModelo() != null) {
-            switch (guitarra.getModelo()) {
+        if (guitarra.getTipo() != null) {
+            switch (guitarra.getTipo()) {
                 case STRATOCASTER:
                     radioStratoCaster.setSelected(true);
                     break;
@@ -166,10 +187,12 @@ public class FormularioFXMLController implements Initializable {
                     break;
                 case ACUSTICA:
                     radioAcustica.setSelected(true);
+                    break;
                 case OTROS:
                     radioOtros.setSelected(true);
                     break;
             }
+            
 }
 }
     

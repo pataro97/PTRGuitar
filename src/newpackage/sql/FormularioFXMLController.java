@@ -5,6 +5,7 @@
  */
 package newpackage.sql;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -56,6 +58,11 @@ public class FormularioFXMLController implements Initializable {
     private EntityManager entityManager;
     private boolean nuevaGuitarra;
     
+    public static final String STRATOCASTER = "S";
+    public static final String LESPAUL = "L";
+    public static final String TELECASTER = "T";
+    public static final String ACUSTICA = "A";
+    public static final String OTROS = "O";
     /**
      * Initializes the controller class.
      */
@@ -72,6 +79,28 @@ public class FormularioFXMLController implements Initializable {
         rootMain.getChildren().remove(formularioFXML);      
 
         rootFormulariosView.setVisible(true);
+        
+        //Almacenar los datos de los campos del formulario
+        guitarra.setModelo(modeloTextField.getText());
+        guitarra.setMadera(maderaTextField.getText());
+        //Ahora hay que hacer lo contrario pasar de string a big decimal
+        guitarra.setPrecio(BigDecimal.valueOf(Double.valueOf(precioTextField.getText())));
+        
+        
+        //Guardar 
+        int numFilaSeleccionada;
+        if(nuevaGuitarra) {
+            guitarraView.getItems().add(guitarra);
+            numFilaSeleccionada = guitarraView.getItems().size() - 1;
+            guitarraView.getSelectionModel().select(numFilaSeleccionada);
+            guitarraView.scrollTo(numFilaSeleccionada);
+        } else {
+            numFilaSeleccionada = guitarraView.getSelectionModel().getSelectedIndex();
+            guitarraView.getItems().set(numFilaSeleccionada, guitarra);
+        }
+        TablePosition pos = new TablePosition(guitarraView, numFilaSeleccionada, null);
+        guitarraView.getFocusModel().focus(pos);
+        guitarraView.requestFocus();
     }
 
     @FXML
@@ -80,6 +109,14 @@ public class FormularioFXMLController implements Initializable {
         rootMain.getChildren().remove(formularioFXML);      
 
         rootFormulariosView.setVisible(true);
+        
+        //Anular la transaccion
+        entityManager.getTransaction().rollback();
+
+        int numFilaSeleccionada = guitarraView.getSelectionModel().getSelectedIndex();
+        TablePosition pos = new TablePosition(guitarraView, numFilaSeleccionada, null);
+        guitarraView.getFocusModel().focus(pos);
+        guitarraView.requestFocus();
     }
     
     
@@ -105,19 +142,24 @@ public class FormularioFXMLController implements Initializable {
         //Pasar bigDecimal a string
         precioTextField.setText(String.valueOf(guitarra.getPrecio()));
         //RadioButton
-//        if (guitarra.getModelo() != null) {
-//            switch (guitarra.getModelo()) {
-//                case CASADO:
-//                    radioButtonCasado.setSelected(true);
-//                    break;
-//                case SOLTERO:
-//                    radioButtonSoltero.setSelected(true);
-//                    break;
-//                case VIUDO:
-//                    radioButtonViudo.setSelected(true);
-//                    break;
-//            }
-//}
+        if (guitarra.getModelo() != null) {
+            switch (guitarra.getModelo()) {
+                case STRATOCASTER:
+                    radioStratoCaster.setSelected(true);
+                    break;
+                case LESPAUL:
+                    radioLesPaul.setSelected(true);
+                    break;
+                case TELECASTER:
+                    radioTelecaster.setSelected(true);
+                    break;
+                case ACUSTICA:
+                    radioAcustica.setSelected(true);
+                case OTROS:
+                    radioOtros.setSelected(true);
+                    break;
+            }
+}
 }
     
     

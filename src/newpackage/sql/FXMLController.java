@@ -174,7 +174,7 @@ public class FXMLController implements Initializable {
             
             // Ocultar la vista de la lista
             rootGuitarrasView.setVisible(false);
-
+            formularioFXMLController.mostrarDatos();
             // Añadir la vista de detalle al StackPane principal para que se muestre
             StackPane rootMain = (StackPane)rootGuitarrasView.getScene().getRoot();
             rootMain.getChildren().add(rootDetalleView);

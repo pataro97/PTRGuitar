@@ -170,7 +170,7 @@ public class FXMLController implements Initializable {
             formularioFXMLController.setTableViewPrevio(tablaViewModelos);
             
             
-            formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, true);
+            formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, false);
             
             // Ocultar la vista de la lista
             rootGuitarrasView.setVisible(false);

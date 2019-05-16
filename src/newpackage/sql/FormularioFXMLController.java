@@ -75,20 +75,21 @@ public class FormularioFXMLController implements Initializable {
     }
     @FXML
     private void onActionButtonGuardar(ActionEvent event) {
-        StackPane rootMain = (StackPane)formularioFXML.getScene().getRoot();
-        rootMain.getChildren().remove(formularioFXML);      
-
-        rootFormulariosView.setVisible(true);
-        
+        //Guardar 
+        int numFilaSeleccionada;
         //Almacenar los datos de los campos del formulario
         guitarra.setModelo(modeloTextField.getText());
         guitarra.setMadera(maderaTextField.getText());
         //Ahora hay que hacer lo contrario pasar de string a big decimal
         guitarra.setPrecio(BigDecimal.valueOf(Double.valueOf(precioTextField.getText())));
         
-        
-        //Guardar 
-        int numFilaSeleccionada;
+        if(nuevaGuitarra) {
+            entityManager.persist(guitarra);
+        } else {
+            entityManager.merge(guitarra);
+        }
+        entityManager.getTransaction().commit();
+        System.out.println(nuevaGuitarra);
         if(nuevaGuitarra) {
             guitarraView.getItems().add(guitarra);
             numFilaSeleccionada = guitarraView.getItems().size() - 1;
@@ -98,6 +99,16 @@ public class FormularioFXMLController implements Initializable {
             numFilaSeleccionada = guitarraView.getSelectionModel().getSelectedIndex();
             guitarraView.getItems().set(numFilaSeleccionada, guitarra);
         }
+        
+        StackPane rootMain = (StackPane)formularioFXML.getScene().getRoot();
+        rootMain.getChildren().remove(formularioFXML);      
+
+        rootFormulariosView.setVisible(true);
+        
+        
+        
+        
+       
         TablePosition pos = new TablePosition(guitarraView, numFilaSeleccionada, null);
         guitarraView.getFocusModel().focus(pos);
         guitarraView.requestFocus();

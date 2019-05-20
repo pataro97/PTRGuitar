@@ -7,12 +7,18 @@ package newpackage.sql;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -21,7 +27,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.util.StringConverter;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  * FXML Controller class
@@ -37,7 +45,7 @@ public class FormularioFXMLController implements Initializable {
     @FXML
     private TextField precioTextField;
     @FXML
-    private ComboBox<?> comboFabricante;
+    private ComboBox<Fabricante> comboFabricante;
     @FXML
     private CheckBox checkStock;
     @FXML
@@ -124,11 +132,18 @@ public class FormularioFXMLController implements Initializable {
         
         
         
-        
-       
         TablePosition pos = new TablePosition(guitarraView, numFilaSeleccionada, null);
         guitarraView.getFocusModel().focus(pos);
         guitarraView.requestFocus();
+        
+        //Guardar fabricante seleccionado del comboBox
+        if (comboFabricante.getValue() != null) {
+            guitarra.setFabricante(comboFabricante.getValue());
+        } else {
+            Alert alert = new Alert(AlertType.INFORMATION, "Debe indicar una provincia");
+            alert.showAndWait();
+        }
+
     }
 
     @FXML
@@ -192,8 +207,51 @@ public class FormularioFXMLController implements Initializable {
                     radioOtros.setSelected(true);
                     break;
             }
+        
             
-}
+            
+         //Combo Box Fabricante
+            
+        Query queryProvinciaFindAll = entityManager.createNamedQuery("Fabricante.findAll");
+        List listProvincia = queryProvinciaFindAll.getResultList();
+        comboFabricante.setItems(FXCollections.observableList(listProvincia));
+        // Si ya se le a asignado un fabricante
+        if (guitarra.getFabricante() != null) {
+            comboFabricante.setValue(guitarra.getFabricante());
+        }
+        
+        
+        // Mostrar el nombre del fabricante una vez pinche sobre el comboBox
+        comboFabricante.setCellFactory((ListView<Fabricante> l) -> new ListCell<Fabricante>() {
+        @Override
+        protected void updateItem(Fabricante fabricante, boolean empty) {
+            super.updateItem(fabricante, empty);
+            if (fabricante == null || empty) {
+                setText("");
+            } else {
+                setText(fabricante.getIdFabricante() + "-" + fabricante.getNombre());
+            }
+        }
+    }); 
+        //Mostrar nombre del frabricante actualmente seleccionado
+        comboFabricante.setConverter(new StringConverter<Fabricante>() {
+            @Override
+            public String toString(Fabricante fabricante) {
+                if (fabricante == null) {
+                    return null;
+                } else {
+                    return fabricante.getIdFabricante() + "-" + fabricante.getNombre();
+                }
+            }
+
+            @Override
+            public Fabricante fromString(String userId) {
+                return null;
+            }
+        });
+        
+        
+    }
 }
     
     

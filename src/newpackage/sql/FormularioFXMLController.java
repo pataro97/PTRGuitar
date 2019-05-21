@@ -86,6 +86,7 @@ public class FormularioFXMLController implements Initializable {
     }
     @FXML
     private void onActionButtonGuardar(ActionEvent event) {
+        if (comboFabricante.getValue() != null) {
         //Guardar 
         int numFilaSeleccionada;
         //Almacenar los datos de los campos del formulario
@@ -137,11 +138,11 @@ public class FormularioFXMLController implements Initializable {
         guitarraView.requestFocus();
         
         //Guardar fabricante seleccionado del comboBox
-        if (comboFabricante.getValue() != null) {
             guitarra.setFabricante(comboFabricante.getValue());
         } else {
-            Alert alert = new Alert(AlertType.INFORMATION, "Debe indicar una provincia");
+            Alert alert = new Alert(AlertType.INFORMATION, "Debe indicar un Fabricante");
             alert.showAndWait();
+            
         }
 
     }
@@ -207,14 +208,14 @@ public class FormularioFXMLController implements Initializable {
                     radioOtros.setSelected(true);
                     break;
             }
-        
+        }
             
             
          //Combo Box Fabricante
             
-        Query queryProvinciaFindAll = entityManager.createNamedQuery("Fabricante.findAll");
-        List listProvincia = queryProvinciaFindAll.getResultList();
-        comboFabricante.setItems(FXCollections.observableList(listProvincia));
+        Query queryFabricanteFindAll = entityManager.createNamedQuery("Fabricante.findAll");
+        List listFabricante = queryFabricanteFindAll.getResultList();
+        comboFabricante.setItems(FXCollections.observableList(listFabricante));
         // Si ya se le a asignado un fabricante
         if (guitarra.getFabricante() != null) {
             comboFabricante.setValue(guitarra.getFabricante());
@@ -255,4 +256,4 @@ public class FormularioFXMLController implements Initializable {
 }
     
     
-}
+

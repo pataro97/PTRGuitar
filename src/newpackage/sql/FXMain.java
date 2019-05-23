@@ -51,7 +51,7 @@ public class FXMain extends Application {
         em.close(); 
         emf.close(); 
         try { 
-            DriverManager.getConnection("jdbc:derby:BDAgendaContactos;shutdown=true"); 
+            DriverManager.getConnection("jdbc:derby:PTRGuitar;shutdown=true"); 
         } catch (SQLException ex) { 
         }        
     }

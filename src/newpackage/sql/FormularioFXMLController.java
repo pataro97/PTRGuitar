@@ -82,6 +82,7 @@ public class FormularioFXMLController implements Initializable {
         // TODO
     }    
     public void setRootFormularioView(Pane rootFormulariosView) {
+        //Declara que rootFormulariosView es la tabla anterior
         this.rootFormulariosView = rootFormulariosView;
     }
     @FXML
@@ -108,27 +109,31 @@ public class FormularioFXMLController implements Initializable {
         }
         //Guardar Check
         guitarra.setStock(checkStock.isSelected());
-        
+        //Si la guitarra es nueva crea nuevo registro y si no solo lo actualiza
         if(nuevaGuitarra) {
             entityManager.persist(guitarra);
         } else {
             entityManager.merge(guitarra);
         }
+        //Realiza la transicion
         entityManager.getTransaction().commit();
         System.out.println(nuevaGuitarra);
+        
         if(nuevaGuitarra) {
+            //Si la guitarra es nueva se añadira una nueva guitarra a la tabla con los nuevos datos y se mostrara selccionada
             guitarraView.getItems().add(guitarra);
             numFilaSeleccionada = guitarraView.getItems().size() - 1;
             guitarraView.getSelectionModel().select(numFilaSeleccionada);
             guitarraView.scrollTo(numFilaSeleccionada);
         } else {
+            //Si la guitarra no es nueva se marcara como selccionada con los nuevos datos
             numFilaSeleccionada = guitarraView.getSelectionModel().getSelectedIndex();
             guitarraView.getItems().set(numFilaSeleccionada, guitarra);
         }
-        
+        //Elimina el formulario fxml de de la vista principal
         StackPane rootMain = (StackPane)formularioFXML.getScene().getRoot();
         rootMain.getChildren().remove(formularioFXML);      
-
+        //Muestra la lista de las guitarras
         rootFormulariosView.setVisible(true);
         
         
@@ -149,14 +154,15 @@ public class FormularioFXMLController implements Initializable {
 
     @FXML
     private void onActionButtonCancelar(ActionEvent event) {
+        //Elimina el formulario fxml de de la vista principal
         StackPane rootMain = (StackPane)formularioFXML.getScene().getRoot();
         rootMain.getChildren().remove(formularioFXML);      
-
+        //Muestra la anterior tabla
         rootFormulariosView.setVisible(true);
         
         //Anular la transaccion
         entityManager.getTransaction().rollback();
-
+        
         int numFilaSeleccionada = guitarraView.getSelectionModel().getSelectedIndex();
         TablePosition pos = new TablePosition(guitarraView, numFilaSeleccionada, null);
         guitarraView.getFocusModel().focus(pos);
@@ -171,15 +177,16 @@ public class FormularioFXMLController implements Initializable {
     
     
     public void setGuitarra(EntityManager entityManager, Guitarra guitarra, boolean nuevaGuitarra) {
-    this.entityManager = entityManager;
-    entityManager.getTransaction().begin();
-    if(!nuevaGuitarra) {
-        this.guitarra = entityManager.find(Guitarra.class, guitarra.getIdGuitarra());
-    } else {
-        this.guitarra = guitarra;
+        this.entityManager = entityManager;
+        entityManager.getTransaction().begin();
+        //Si la guitarra es nueva le añade un nuevo ID si no se mantendra con el id que ya tiene
+        if(!nuevaGuitarra) {
+            this.guitarra = entityManager.find(Guitarra.class, guitarra.getIdGuitarra());
+        } else {
+            this.guitarra = guitarra;
+        }
+        this.nuevaGuitarra = nuevaGuitarra;
     }
-    this.nuevaGuitarra = nuevaGuitarra;
-}
     public void mostrarDatos() {
         modeloTextField.setText(guitarra.getModelo());
         maderaTextField.setText(guitarra.getMadera());

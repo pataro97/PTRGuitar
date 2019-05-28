@@ -70,9 +70,8 @@ public class FXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        // Asocia las columnas a las propides de la clase entidad
         columnModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
-        columnFabricante.setCellValueFactory(new PropertyValueFactory<>("fabricante"));
         columnMadera.setCellValueFactory(new PropertyValueFactory<>("madera"));
         columnTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         //Nombre del fabricante asociado
@@ -87,6 +86,7 @@ public class FXMLController implements Initializable {
         tablaViewModelos.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             modeloSeleccionado = newValue;
+            //Si los campos de la guitarra que se a seleccionado no son nulos se añadiran en los campos de abajo
             if (modeloSeleccionado != null) {
                 textFieldModelo.setText(modeloSeleccionado.getModelo());
                 textFieldMadera.setText(modeloSeleccionado.getMadera());
@@ -99,6 +99,7 @@ public class FXMLController implements Initializable {
             }
         });
     }    
+    //Carga un array con las guitarras de la base de datos
     public void cargarTodasGuitarras() {
         Query queryGuitarraFindAll = entityManager.createNamedQuery("Guitarra.findAll");
         List<Guitarra> listGuitarra = queryGuitarraFindAll.getResultList();
@@ -106,7 +107,9 @@ public class FXMLController implements Initializable {
     }  
 
     @FXML
+    
     private void onActionButtonGuardar(ActionEvent event) {
+        // Si se ha seleccionado un modelo se cogera los datos de los campos de texto e iniciara una transancion para guardar los datos en la base de datos
          if (modeloSeleccionado != null) {
             modeloSeleccionado.setModelo(textFieldModelo.getText());
             modeloSeleccionado.setMadera(textFieldMadera.getText());
@@ -114,8 +117,9 @@ public class FXMLController implements Initializable {
             entityManager.getTransaction().begin();
             entityManager.merge(modeloSeleccionado);
             entityManager.getTransaction().commit();
-
+            //Crea una variable numFilaSeleccionada para almacenar el numero de la fila seleccionada
             int numFilaSeleccionada = tablaViewModelos.getSelectionModel().getSelectedIndex();
+            //Mostrara los datos guardados a la colimna seleccionada
             tablaViewModelos.getItems().set(numFilaSeleccionada, modeloSeleccionado);
             TablePosition pos = new TablePosition(tablaViewModelos, numFilaSeleccionada, null);
             tablaViewModelos.getFocusModel().focus(pos);
@@ -126,24 +130,16 @@ public class FXMLController implements Initializable {
     @FXML
     private void onActionButtonNuevo(ActionEvent event) {
         try {
-    // Cargar la vista de detalle
+        // Cargar la vista de detalle
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FormularioFXML.fxml"));
             Parent rootDetalleView = fxmlLoader.load();     
             
-            
             FormularioFXMLController formularioFXMLController = (FormularioFXMLController) fxmlLoader.getController();  
             formularioFXMLController.setRootFormularioView(rootGuitarrasView);
-            
-            
-            
-            
             formularioFXMLController.setTableViewPrevio(tablaViewModelos);
-            
-            
-            // Para el botón Nuevo:
             modeloSeleccionado = new Guitarra();
             formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, true);
-            //Metodo que mostrara los datos en el formulario
+            //Metodo que mostrara los datos en el formulario(en este caso solo para mostrar la lista de fabricantes)
             formularioFXMLController.mostrarDatos();
             
             // Ocultar la vista de la lista guitarras
@@ -164,17 +160,10 @@ public class FXMLController implements Initializable {
             try {
                // Cargar la vista de detalle
                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FormularioFXML.fxml"));
-               Parent rootDetalleView = fxmlLoader.load();     
-
-
-
+               Parent rootDetalleView = fxmlLoader.load();  
                FormularioFXMLController formularioFXMLController = (FormularioFXMLController) fxmlLoader.getController();  
                formularioFXMLController.setRootFormularioView(rootGuitarrasView);
-
-
                formularioFXMLController.setTableViewPrevio(tablaViewModelos);
-
-
                formularioFXMLController.setGuitarra(entityManager, modeloSeleccionado, false);
 
                // Ocultar la vista de la lista

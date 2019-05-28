@@ -135,9 +135,6 @@ public class FormularioFXMLController implements Initializable {
         rootMain.getChildren().remove(formularioFXML);      
         //Muestra la lista de las guitarras
         rootFormulariosView.setVisible(true);
-        
-        
-        
         TablePosition pos = new TablePosition(guitarraView, numFilaSeleccionada, null);
         guitarraView.getFocusModel().focus(pos);
         guitarraView.requestFocus();
